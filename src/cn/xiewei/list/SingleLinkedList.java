@@ -30,8 +30,9 @@ public class SingleLinkedList {
          * 有参构造函数，为链表节点赋值
          * @param data
          */
-        public Node(Object data) {
+        public Node(Object data,Node newNode) {
             this.data=data ;
+            this.next=newNode;
         }
     }
     
@@ -43,11 +44,11 @@ public class SingleLinkedList {
      * @return Object
      */
     public Object addHead(Object data) {
-        Node newhead=new Node(data);//创建一个名为newhead的节点
+        Node newhead=new Node(data,head);//创建一个名为newhead的节点,新节点的指针指向旧表头
         if (size==0) {
             head=newhead;
         } else {
-            newhead.next=head;//新链表头的指针指向旧表头
+          
             head=newhead;
         }
         size++;
