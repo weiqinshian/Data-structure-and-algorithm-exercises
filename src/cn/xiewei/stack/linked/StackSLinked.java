@@ -15,6 +15,13 @@ public class StackSLinked implements Stack {
         return size;
     }
 
+    //Çå¿ÕÕ»
+    public void clearStack() {
+        while ( this.getSize()!=0) {
+            this.pop();
+        }
+     }
+    
     //ÅÐ¶Ï¶ÑÕ»ÊÇ·ñÎª¿Õ
     public boolean isEmpty() {
         return size==0;

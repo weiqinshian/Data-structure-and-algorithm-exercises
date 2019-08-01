@@ -7,6 +7,9 @@ public interface Stack {
     //判断堆栈是否为空
     public boolean isEmpty();
     
+    //清空栈
+    public void clearStack();
+    
     //数据元素e入栈
     public void push(Object e);
     

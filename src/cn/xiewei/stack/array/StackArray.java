@@ -13,12 +13,18 @@ public class StackArray  implements Stack {
         top = -1;
         elements = new Object[LEN];
     }
+    
 
     //返回堆栈的大小
     public int getSize() {
         return top+1;
     }
-
+    //清空栈
+    public void clearStack() {
+        while ( this.getSize()!=0) {
+            this.pop();
+        }
+     }
     //判断堆栈是否为空
     public boolean isEmpty() {
         return top<0;

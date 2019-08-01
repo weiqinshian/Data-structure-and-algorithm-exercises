@@ -8,7 +8,7 @@ import cn.xiewei.stack.linked.StackSLinked;
  * @author XW
  * @create_date 2019Äê7ÔÂ31ÈÕ
  */
-public class TestStack {
+public class StackSLinkedDemo {
     public static void main(String[] args) {
         baseConversion(2007);
     }

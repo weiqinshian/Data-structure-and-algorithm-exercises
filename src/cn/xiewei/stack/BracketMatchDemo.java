@@ -2,7 +2,7 @@ package cn.xiewei.stack;
 
 import cn.xiewei.stack.linked.StackSLinked;
 
-public class bracketMatch {
+public class BracketMatchDemo {
 
     public static void main(String[] args) {
         String s = "{[{}]([])}";
