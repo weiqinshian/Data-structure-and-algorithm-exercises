@@ -1,4 +1,4 @@
-package cn.xiewei.stack;
+package cn.xiewei.stack.app;
 
 public class Cell {
     int x = 0; // 单元所在行

@@ -1,9 +1,10 @@
-package cn.xiewei.stack;
+package cn.xiewei.stack.app;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.xiewei.stack.Stack;
 import cn.xiewei.stack.linked.StackSLinked;
 
 /**

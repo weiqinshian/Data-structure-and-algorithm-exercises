@@ -37,7 +37,7 @@ public class StackSLinked implements Stack {
     //Õ»¶¥ÔªËØ³öÕ»
     public Object pop() throws StackEmptyException {
         if (size<1)
-            throw new StackEmptyException("´íÎó£¬¶ÑÕ»Îª¿Õ¡£");
+           return null;     //            throw new StackEmptyException("´íÎó£¬¶ÑÕ»Îª¿Õ¡£");
         Object obj = top.getData();
         top = top.getNext();
         size--;

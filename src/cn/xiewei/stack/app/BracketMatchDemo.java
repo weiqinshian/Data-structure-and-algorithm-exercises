@@ -1,5 +1,6 @@
-package cn.xiewei.stack;
+package cn.xiewei.stack.app;
 
+import cn.xiewei.stack.Stack;
 import cn.xiewei.stack.linked.StackSLinked;
 
 public class BracketMatchDemo {
