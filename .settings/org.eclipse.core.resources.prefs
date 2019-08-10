@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/cn/xiewei/queue/Interface/IQueue.java=UTF-8
+encoding//src/cn/xiewei/queue/impl/ArrayQueue.java=UTF-8
+encoding//src/cn/xiewei/queue/impl/CycQueue.java=UTF-8
+encoding//src/cn/xiewei/queue/impl/LinkedQueue.java=UTF-8
+encoding//src/cn/xiewei/stack/app/Hanoi.java=UTF-8
