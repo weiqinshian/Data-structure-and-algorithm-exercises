@@ -1,7 +1,12 @@
 package cn.xiewei.queue;
 
 import cn.xiewei.queue.impl.LinkedQueue;
-
+/**
+ * simulation n.  模拟; 仿真; 假装; 冒充
+ * 
+ * @author XW
+ * @create_date 2019年8月20日
+ */
 public class Simulation {
 
     private static Long TotalTime; //总逗留时间
@@ -11,7 +16,6 @@ public class Simulation {
     static class Event { //事件类 元素
         private int eventType;//事件类型
         private Long time;//事件发生的时间
-
     }
 
     static class QEvent { //排队的队列元素
