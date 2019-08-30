@@ -1,19 +1,21 @@
 package cn.xiewei.tree;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
+import cn.xiewei.tree.print.TreeNodeInterface;
+import cn.xiewei.tree.print.TreePrintUtil;
+
 /**
- * 二叉树遍历
+ * 二叉树赋值&遍历
  * 
  * @author XW
  * @create_date 2019年8月25日
  */
 public class BTreeTraversal {
-    static class TreeNode {
+    static class TreeNode implements TreeNodeInterface {
         private Integer data;
         private TreeNode leftChild;
         private TreeNode rightChild;
@@ -45,11 +47,22 @@ public class BTreeTraversal {
         public void setRightChild(TreeNode rightChild) {
             this.rightChild = rightChild;
         }
+
+        @Override
+        public String toString() {
+            return "[" + this.data + "]";
+        }
+
+        @Override
+        public String getPrintInfo() {
+
+            return toString();
+        }
         
     }
 
     /**
-     * 构建一个二叉树
+     * 先序遍历（深度优先）方式，构建一个二叉树
      *
      * @param inputList
      * @return
@@ -71,19 +84,25 @@ public class BTreeTraversal {
     }
 
     /**
-     * 构建一个二叉树
-     *
+     * 层次遍历（广度优先方式），构建一个二叉树
+     * 传参数的时候，广度优先，更容易让人理解一点
      * @param inputList
      * @return
      */
     public static void createBinaryTreeByBreadth(Integer[] inputList, List<TreeNode> nodelist) {
 
+        /*1.【生成树的所有节点】：数组中的每个值，都构建一个TreeNode节点对象，存储到nodelist集合中*/
         for (int nodeindex = 0; nodeindex < inputList.length; nodeindex++) {
             TreeNode treeNode = new TreeNode(inputList[nodeindex]);
             nodelist.add(treeNode);
         }
-
+        /*2.【树的各节点之间建立引用关系】：为nodelist集合中，各TreeNode节点中的左右子节点构建，引用关系*/
         for (int index = 0; index < nodelist.size() / 2 - 1; index++) {
+           //给所有父节点设定子节点  
+            //编号为n的节点他的左子节点编号为2*n 右子节点编号为2*n+1 但是因为list从0开始编号，所以还要+1  
+            //如果，数组是1-9数字
+            //这里父节点有1（2,3）,2（4,5）,3（6,7）,4（8,9） 但是最后一个父节点是节点4，有可能没有右子节点需要单独处理  
+            //如果是输入数组是1-8， 就能测试出这个问题。
             nodelist.get(index).setLeftChild(nodelist.get(index * 2 + 1));
             nodelist.get(index).setRightChild(nodelist.get(index * 2 + 2));
         }
@@ -255,6 +274,7 @@ public class BTreeTraversal {
         Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(root);// 向队列尾部插入元素
         int n = queue.size();
+        int level=0;
         while (!queue.isEmpty()) {
 
             for (int i = 0; i < n; i++) {
@@ -268,33 +288,20 @@ public class BTreeTraversal {
                     queue.offer(node.rightChild);
                 }
             }
-            System.out.println("一层结束");
+            System.out.println("第"+level+"层结束");
+            level++;
             n = queue.size();
         }
 
     }
 
     public static void main(String[] args) {
-
         TreeNode t=null;
-        /*初始化方式1：*/
-        LinkedList<Integer> linkedList = new LinkedList<Integer>(
-                Arrays.asList(new Integer[] { 3, 2, 9, null, null, 10, null, null, 8, null, 4 }));
-        // LinkedList<Integer> linkedList = new
-        // LinkedList<Integer>(Arrays.asList(new Integer[]{1, 2, null, null,
-        // 3}));
-
-        // 1,2,3和1,2,null,3构建的二叉树 第一个是一个只有左节点的树
-        // 1, 2,null,null, 3 构建的才是 根节点是1，左节点是2 右节点是3
-        // 注意！链表构建的和数组不一样，数组的话 根节点是1，左节点是2 右节点是3 存法是123 链表是1, 2,null,null, 3
-        t = BTreeTraversal.createBinaryTree(linkedList);
-        /*初始化方式2：广义优先法初始化（这种初始化树的方式更容易理解）*/
-
+        /*初始化方式1：广义优先法初始化（这种初始化树的方式更容易理解）*/
         List<TreeNode> nodelist = new LinkedList<>();  
-//        createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 },nodelist) ;
-        createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6,null, null, null, 7, 8 },nodelist) ;
-        t = nodelist.get(0);;
-        
+        // createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6,null, null, null, 7, 8 },nodelist) ;
+              createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13 },nodelist) ;
+        t = nodelist.get(0);        
         BTreeTraversal.preOrder(t);
         System.out.println("先序遍历");
         preStackOrder(t);
@@ -311,6 +318,9 @@ public class BTreeTraversal {
         levelOrderCount(t);
         System.out.println("层次遍历知道自己的层数");
         // todo 有问题 System.out.println("栈后序遍历");
+        
+        //从根开始打印
+        TreePrintUtil.pirnt(t);
     }
 
 }
