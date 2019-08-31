@@ -1,5 +1,4 @@
-package cn.xiewei.tree.huffman;
-
+package cn.xiewei.tree.huffmanstring;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +7,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import cn.xiewei.tree.print3.TreePrinter;
+/**
+ * Huffman编码算法主要用到的数据结构是完全二叉树(full binary tree)和优先级队列。后者用的是java.util.PriorityQueue，前者自己实现(都为内部类)
+ * 
+ * @author XW
+ * @create_date 2019年8月30日
+ */
 public class TestHuffman {
+
+    public static void main(String[] args) {
+        String oriStr = "Huffman codes compress data very effectively: savings of 20% to 90% are typical, "
+                + "depending on the characteristics of the data being compressed. 中华崛起";
+        Map<Character, Integer> statistics = statistics(oriStr.toCharArray());//统计数据
+        String encodedBinariStr = encode(oriStr, statistics);//编码
+        String decodedStr = decode(encodedBinariStr, statistics);//解码
+    
+        System.out.println("Original sstring: " + oriStr);
+        System.out.println("Huffman encoed length="+encodedBinariStr.length()+" ,binary string: " + encodedBinariStr);
+        System.out.println("decoded string from binariy string: " + decodedStr);
+    
+        System.out.println("UTF-8 encoed length="+getStringOfByte(oriStr, Charset.forName("UTF-8")).length()+" ,binary string of UTF-8: "
+                + getStringOfByte(oriStr, Charset.forName("UTF-8")));
+        System.out.println("UTF-16 encoed length="+getStringOfByte(oriStr, Charset.forName("UTF-16")).length()+" ,binary string of UTF-16: "
+                + getStringOfByte(oriStr, Charset.forName("UTF-16")));
+        System.out.println("US-ASCII encoed length="+getStringOfByte(oriStr, Charset.forName("US-ASCII")).length()+" ,binary string of US-ASCII: "
+                + getStringOfByte(oriStr, Charset.forName("US-ASCII")));
+        System.out.println("GB2312 encoed length="+getStringOfByte(oriStr, Charset.forName("GB2312")).length()+" ,binary string of GB2312: "
+                + getStringOfByte(oriStr, Charset.forName("GB2312")));
+    }
 
     public static String getStringOfByte(String str, Charset charset) {
         if (str == null || str.equals("")) {
@@ -36,27 +63,6 @@ public class TestHuffman {
         return buffer.toString();
     }
     
-    public static void main(String[] args) {
-        String oriStr = "Huffman codes compress data very effectively: savings of 20% to 90% are typical, "
-                + "depending on the characteristics of the data being compressed. 中华崛起";
-        Map<Character, Integer> statistics = statistics(oriStr.toCharArray());//统计数据
-        String encodedBinariStr = encode(oriStr, statistics);//编码
-        String decodedStr = decode(encodedBinariStr, statistics);//解码
- 
-        System.out.println("Original sstring: " + oriStr);
-        System.out.println("Huffman encoed binary string: " + encodedBinariStr);
-        System.out.println("decoded string from binariy string: " + decodedStr);
- 
-        System.out.println("binary string of UTF-8: "
-                + getStringOfByte(oriStr, Charset.forName("UTF-8")));
-        System.out.println("binary string of UTF-16: "
-                + getStringOfByte(oriStr, Charset.forName("UTF-16")));
-        System.out.println("binary string of US-ASCII: "
-                + getStringOfByte(oriStr, Charset.forName("US-ASCII")));
-        System.out.println("binary string of GB2312: "
-                + getStringOfByte(oriStr, Charset.forName("GB2312")));
-    }
-    
     /**
      * 统计数据
      * 既然要按频率来安排编码表，那么首先当然得获得频率的统计信息。
@@ -81,7 +87,13 @@ public class TestHuffman {
         return map;
     }
 
-    
+    /**
+     * 编码
+     *   
+     * @author XW
+     * @create_date 2019年8月31日
+     * @return String
+     */
     public static String encode(String originalStr,
             Map<Character, Integer> statistics) {
         if (originalStr == null || originalStr.equals("")) {
@@ -96,13 +108,24 @@ public class TestHuffman {
         StringBuffer buffer = new StringBuffer();
         for (char c : charArray) {
             Character character = new Character(c);
-            buffer.append(encodInfo.get(character));
+            buffer.append(encodInfo.get(character));//循环拼接获取，“赫夫曼”编码之后生成的二进制序列
         }
  
         return buffer.toString();
     }
  
 
+    /**
+     * leafNodes:集合中存储的是所有叶子节点
+     * 
+     * 某个字符对应的编码为，从该字符所在的叶子节点向上搜索，
+     * 如果该字符节点是父节点的左节点，编码字符之前加0，反之如果是右节点，加1，直到根节点。
+     * 只要获取了字符和二进制码之间的mapping关系，编码就非常简单。代码如下:
+     *   
+     * @author XW
+     * @create_date 2019年8月31日
+     * @return Map<Character,String>
+     */
     private static Map<Character, String> buildEncodingInfo(List<Node> leafNodes) {
         Map<Character, String> codewords = new HashMap<Character, String>();
         for (Node leafNode : leafNodes) {
@@ -117,10 +140,10 @@ public class TestHuffman {
                     codeword = "1" + codeword;
                 }
  
-                currentNode = currentNode.parent;
+                currentNode = currentNode.parent;//第一次循环，获取叶子节点的父节点
             } while (currentNode.parent != null);
  
-            codewords.put(character, codeword);
+            codewords.put(character, codeword);//将字符和编码保存的集合中
         }
  
         return codewords;
@@ -148,14 +171,11 @@ public class TestHuffman {
         for (int i = 0; i < size; i++) {
             binaryList.addLast(new Character(binaryCharArray[i]));
         }
- 
-        List<Node> leafNodes = new ArrayList<Node>();
-        Tree tree = buildTree(statistics, leafNodes);
- 
+
         StringBuffer buffer = new StringBuffer();
  
         while (binaryList.size() > 0) {
-            Node node = tree.root;
+            Node node = Tree.getRoot();//编码的时候构建了一次二叉树，这里直接拿来用就可以了
  
             do {
                 Character c = binaryList.removeFirst();
@@ -164,7 +184,7 @@ public class TestHuffman {
                 } else {
                     node = node.rightNode;
                 }
-            } while (!node.isLeaf());
+            } while (!node.isLeaf());//节点是叶子节点就退出循环
  
             buffer.append(node.chars);
         }
@@ -189,6 +209,7 @@ public class TestHuffman {
             List<Node> leafs) {
         Character[] keys = statistics.keySet().toArray(new Character[0]);
  
+        /*1. 创建一个队列，存储，初始化的所有叶子节点，按照概率由小到大的顺序。*/
         PriorityQueue<Node> priorityQueue = new PriorityQueue<Node>();
         for (Character character : keys) {
             Node node = new Node();
@@ -199,11 +220,12 @@ public class TestHuffman {
         }
  
         int size = priorityQueue.size();
+        /*2. 每次从队列，取出两个节点，并创建一个新节点，新节点概率为取出的两个子节点概率之和。*/
         for (int i = 1; i <= size - 1; i++) {
             Node node1 = priorityQueue.poll();
             Node node2 = priorityQueue.poll();
  
-            Node sumNode = new Node();
+            Node sumNode = new Node();//
             sumNode.chars = node1.chars + node2.chars;
             sumNode.frequence = node1.frequence + node2.frequence;
  
@@ -218,93 +240,30 @@ public class TestHuffman {
  
         Tree tree = new Tree();
         tree.root = priorityQueue.poll();
+        treePrinter(tree.root);
         return tree;
     }
-
     
-    /**
-     * Huffman编码算法主要用到的数据结构是完全二叉树(full binary tree)和优先级队列。后者用的是java.util.PriorityQueue，前者自己实现(都为内部类)
-     * 
-     * @author XW
-     * @create_date 2019年8月30日
-     */
-    
-    static   class Node implements Comparable<Node> {
-        private String chars = "";
-        private int frequence = 0;
-        private Node parent;
-        private Node leftNode;
-        private Node rightNode;
-
-        @Override
-        public int compareTo(Node n) {
-            return frequence - n.frequence;
-        }
-
-        public boolean isLeaf() {
-            return chars.length() == 1;
-        }
-
-        public boolean isRoot() {
-            return parent == null;
-        }
-
-        public boolean isLeftChild() {
-            return parent != null && this == parent.leftNode;
-        }
-
-        public int getFrequence() {
-            return frequence;
-        }
-
-        public void setFrequence(int frequence) {
-            this.frequence = frequence;
-        }
-
-        public String getChars() {
-            return chars;
-        }
-
-        public void setChars(String chars) {
-            this.chars = chars;
-        }
-
-        public Node getParent() {
-            return parent;
-        }
-
-        public void setParent(Node parent) {
-            this.parent = parent;
-        }
-
-        public Node getLeftNode() {
-            return leftNode;
-        }
-
-        public void setLeftNode(Node leftNode) {
-            this.leftNode = leftNode;
-        }
-
-        public Node getRightNode() {
-            return rightNode;
-        }
-
-        public void setRightNode(Node rightNode) {
-            this.rightNode = rightNode;
-        }
+    public static void treePrinter(Node t) {
+        
+        TreePrinter<Node> printer = new TreePrinter<>(n -> ""+n.getFrequence(), n -> n.getLeftNode(), n -> n.getRightNode());
+        
+        printer.setHspace(3);
+        printer.setSquareBranches(true);
+        printer.printTree(t);
+        System.out.println();
+        
+        System.out.println("打印二叉树，方式2：");
+        printer.setSquareBranches(false);
+        printer.printTree(t);
+        
     }
+
     
-    static class Tree {
-        private Node root;
 
-        public Node getRoot() {
-            return root;
-        }
+    
 
-        public void setRoot(Node root) {
-            this.root = root;
-        }
-    }
+
 
 }
 

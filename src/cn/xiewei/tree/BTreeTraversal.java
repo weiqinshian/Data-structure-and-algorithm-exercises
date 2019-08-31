@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-import cn.xiewei.tree.print.TreeNodeInterface;
-import cn.xiewei.tree.print.TreePrintUtil;
+import cn.xiewei.tree.print3.TreePrinter;
 
 /**
  * 二叉树赋值&遍历
@@ -15,51 +14,7 @@ import cn.xiewei.tree.print.TreePrintUtil;
  * @create_date 2019年8月25日
  */
 public class BTreeTraversal {
-    static class TreeNode implements TreeNodeInterface {
-        private Integer data;
-        private TreeNode leftChild;
-        private TreeNode rightChild;
 
-        public TreeNode(Integer data) {
-            this.data = data;
-        }
-
-        public Integer getData() {
-            return data;
-        }
-
-        public void setData(Integer data) {
-            this.data = data;
-        }
-
-        public TreeNode getLeftChild() {
-            return leftChild;
-        }
-
-        public void setLeftChild(TreeNode leftChild) {
-            this.leftChild = leftChild;
-        }
-
-        public TreeNode getRightChild() {
-            return rightChild;
-        }
-
-        public void setRightChild(TreeNode rightChild) {
-            this.rightChild = rightChild;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + this.data + "]";
-        }
-
-        @Override
-        public String getPrintInfo() {
-
-            return toString();
-        }
-        
-    }
 
     /**
      * 先序遍历（深度优先）方式，构建一个二叉树
@@ -67,7 +22,7 @@ public class BTreeTraversal {
      * @param inputList
      * @return
      */
-    public static TreeNode createBinaryTree(LinkedList<Integer> inputList) {
+    public  TreeNode createBinaryTree(LinkedList<Integer> inputList) {
         TreeNode node = null;
         if (inputList == null || inputList.isEmpty()) {
             return null;
@@ -77,8 +32,8 @@ public class BTreeTraversal {
         // 用递归的形式构建树，其实和先序遍历的顺序是一样的
         if (data != null) {
             node = new TreeNode(data);
-            node.leftChild = createBinaryTree(inputList);
-            node.rightChild = createBinaryTree(inputList);
+            node.left = createBinaryTree(inputList);
+            node.right = createBinaryTree(inputList);
         }
         return node;
     }
@@ -103,13 +58,13 @@ public class BTreeTraversal {
             //如果，数组是1-9数字
             //这里父节点有1（2,3）,2（4,5）,3（6,7）,4（8,9） 但是最后一个父节点是节点4，有可能没有右子节点需要单独处理  
             //如果是输入数组是1-8， 就能测试出这个问题。
-            nodelist.get(index).setLeftChild(nodelist.get(index * 2 + 1));
-            nodelist.get(index).setRightChild(nodelist.get(index * 2 + 2));
+            nodelist.get(index).setLeft(nodelist.get(index * 2 + 1));
+            nodelist.get(index).setRight(nodelist.get(index * 2 + 2));
         }
         int index = nodelist.size() / 2 - 1;
-        nodelist.get(index).setLeftChild(nodelist.get(index * 2 + 1));
+        nodelist.get(index).setLeft(nodelist.get(index * 2 + 1));
         if (nodelist.size() % 2 == 1) {
-            nodelist.get(index).setRightChild(nodelist.get(index * 2 + 2));
+            nodelist.get(index).setRight(nodelist.get(index * 2 + 2));
         }
     }
 
@@ -123,9 +78,9 @@ public class BTreeTraversal {
             return;
         }
 
-        System.out.print(node.data + " ");
-        preOrder(node.leftChild);
-        preOrder(node.rightChild);
+        System.out.print(node.value + " ");
+        preOrder(node.left);
+        preOrder(node.right);
     }
 
     /**
@@ -140,15 +95,15 @@ public class BTreeTraversal {
 
         while (node != null || !stack.isEmpty()) {
             while (node != null) {
-                System.out.print(node.data);
+                System.out.print(node.value);
                 // 记录下访问过的节点
                 stack.push(node);
-                node = node.leftChild;
+                node = node.left;
             }
             // 当左边都遍历完
             if (!stack.isEmpty()) {
                 node = stack.pop();
-                node = node.rightChild;
+                node = node.right;
             }
         }
 
@@ -164,9 +119,9 @@ public class BTreeTraversal {
             return;
         }
 
-        inOrder(node.leftChild);
-        System.out.print(node.data + " ");
-        inOrder(node.rightChild);
+        inOrder(node.left);
+        System.out.print(node.value + " ");
+        inOrder(node.right);
     }
 
     /**
@@ -180,13 +135,13 @@ public class BTreeTraversal {
         while (node != null || !stack.isEmpty()) {
             while (node != null) {
                 stack.push(node);
-                node = node.leftChild;
+                node = node.left;
             }
 
             if (!stack.isEmpty()) {
                 node = stack.pop();
-                System.out.print(node.data);
-                node = node.rightChild;
+                System.out.print(node.value);
+                node = node.right;
             }
         }
 
@@ -201,9 +156,9 @@ public class BTreeTraversal {
         if (node == null) {
             return;
         }
-        postOrder(node.leftChild);
-        postOrder(node.rightChild);
-        System.out.print(node.data + " ");
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.print(node.value + " ");
     }
 
     /**
@@ -218,20 +173,20 @@ public class BTreeTraversal {
             // 左右中
             while (node != null) {
                 if (node != lastNode) {
-                    System.out.println("将node放到push:" + node.data);
+                    System.out.println("将node放到push:" + node.value);
                     stack.push(node);
                 }
-                node = node.leftChild;
+                node = node.left;
             }
 
             if (!stack.isEmpty()) {
                 node = stack.pop();
-                System.out.println("将node Pop:" + node.data);
-                if (lastNode == node.rightChild) {
-                    System.out.print("node左节点为空:" + node.data);
+                System.out.println("将node Pop:" + node.value);
+                if (lastNode == node.right) {
+                    System.out.print("node左节点为空:" + node.value);
                     lastNode = node;
                 } else {
-                    node = node.rightChild;
+                    node = node.right;
                 }
             }
         }
@@ -247,13 +202,13 @@ public class BTreeTraversal {
         queue.offer(root);
         while (!queue.isEmpty()) {
             TreeNode node = queue.poll();
-            System.out.print(node.data + " ");
-            if (node.leftChild != null) {
-                queue.offer(node.leftChild);
+            System.out.print(node.value + " ");
+            if (node.left != null) {
+                queue.offer(node.left);
             }
 
-            if (node.rightChild != null) {
-                queue.offer(node.rightChild);
+            if (node.right != null) {
+                queue.offer(node.right);
 
             }
         }
@@ -279,13 +234,13 @@ public class BTreeTraversal {
 
             for (int i = 0; i < n; i++) {
                 TreeNode node = queue.poll();
-                System.out.print(node.data + " ");
-                if (node.leftChild != null) {
-                    queue.offer(node.leftChild);
+                System.out.print(node.value + " ");
+                if (node.left != null) {
+                    queue.offer(node.left);
                 }
 
-                if (node.rightChild != null) {
-                    queue.offer(node.rightChild);
+                if (node.right != null) {
+                    queue.offer(node.right);
                 }
             }
             System.out.println("第"+level+"层结束");
@@ -299,8 +254,8 @@ public class BTreeTraversal {
         TreeNode t=null;
         /*初始化方式1：广义优先法初始化（这种初始化树的方式更容易理解）*/
         List<TreeNode> nodelist = new LinkedList<>();  
-        // createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6,null, null, null, 7, 8 },nodelist) ;
-              createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13 },nodelist) ;
+        //   createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6,null, null, null, 7, 8 },nodelist) ;
+                  createBinaryTreeByBreadth(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13 },nodelist) ;
         t = nodelist.get(0);        
         BTreeTraversal.preOrder(t);
         System.out.println("先序遍历");
@@ -320,7 +275,26 @@ public class BTreeTraversal {
         // todo 有问题 System.out.println("栈后序遍历");
         
         //从根开始打印
-        TreePrintUtil.pirnt(t);
+
+//        BTreePrinter bTreePrinter = new BTreePrinter();
+//       bTreePrinter.printNode(t);
+        
+        
+        System.out.println();
+        System.out.println("打印二叉树，方式1：");
+
+        TreePrinter<TreeNode> printer = new TreePrinter<>(n -> ""+n.getValue(), n -> n.getLeft(), n -> n.getRight());
+        
+        printer.setHspace(3);
+        printer.setSquareBranches(true);
+        printer.printTree(t);
+        System.out.println();
+        
+        System.out.println("打印二叉树，方式2：");
+        printer.setSquareBranches(false);
+        printer.printTree(t);
     }
+    
+
 
 }
