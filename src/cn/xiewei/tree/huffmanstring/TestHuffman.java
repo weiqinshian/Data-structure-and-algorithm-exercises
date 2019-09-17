@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import cn.xiewei.tree.print3.TreePrinter;
+import cn.xiewei.tree.print.TreePrinter;
 /**
  * Huffman编码算法主要用到的数据结构是完全二叉树(full binary tree)和优先级队列。后者用的是java.util.PriorityQueue，前者自己实现(都为内部类)
  * 

@@ -23,7 +23,7 @@ public class CharCounter {
      * @param input InputStream对象 
      * @throws IOException 
      */  
-    public CharCounter(InputStream input) throws IOException{  
+    public CharCounter(InputStream input) throws IOException{
         int ch;//读到的字节  
         //一直读到文件的末尾，每一种byte出现了多少次  
         while((ch=input.read())!=-1){  

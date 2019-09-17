@@ -1,4 +1,4 @@
-package cn.xiewei.tree.print3;
+package cn.xiewei.tree.print;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

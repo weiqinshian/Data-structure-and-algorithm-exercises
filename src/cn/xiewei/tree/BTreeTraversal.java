@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-import cn.xiewei.tree.print3.TreePrinter;
+import cn.xiewei.tree.print.TreePrinter;
 
 /**
  * ¶ş²æÊ÷¸³Öµ&±éÀú

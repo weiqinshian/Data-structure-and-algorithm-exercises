@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class HZIP {
+public class HZIPMain {
     /** 
      * 压缩文件的方法，此方法需要传入正确的绝对路径名 
      * @param inFile 需要被压缩的文件 
