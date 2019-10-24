@@ -1,4 +1,4 @@
-package cn.xiewei.graph;
+package cn.xiewei.graph.array;
 
 /**
  * 邻接矩阵有向图
@@ -32,14 +32,6 @@ public class MatrixDG {
         return -1;
     }
 
-    public static void main(String[] args) {
-        char[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
-        char[][] edges = new char[][] { { 'A', 'C' }, { 'A', 'D' }, { 'A', 'F' }, { 'B', 'C' }, { 'C', 'D' },
-                { 'E', 'G' }, { 'D', 'G' }, { 'I', 'J' }, { 'J', 'G' }, };
-        MatrixDG pG = new MatrixDG(vexs, edges);
-        printResult(vexs, matrix);
-    }
-
     public static void printResult(char[] vexs, int[][] edgs) {
         System.out.println("顶点的数组：");
         System.out.print("[");
@@ -51,7 +43,7 @@ public class MatrixDG {
                 System.out.print(vexs[i] + ",");
         }
         System.out.println("]");
-
+    
         System.out.println("打印矩阵，矩阵中存储边的权值和方向，有向图矩阵不对称：");
         System.out.print("  ");
         for (int i = 0; i < vexs.length; i++) {
@@ -73,5 +65,13 @@ public class MatrixDG {
             }
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+        char[] vexs = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
+        char[][] edges = new char[][] { { 'A', 'C' }, { 'A', 'D' }, { 'A', 'F' }, { 'B', 'C' }, { 'C', 'D' },
+                { 'E', 'G' }, { 'D', 'G' }, { 'I', 'J' }, { 'J', 'G' }, };
+        MatrixDG pG = new MatrixDG(vexs, edges);
+        printResult(vexs, matrix);
     }
 }
