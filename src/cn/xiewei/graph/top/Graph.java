@@ -3,12 +3,6 @@ package cn.xiewei.graph.top;
 import cn.xiewei.stack.Stack;
 import cn.xiewei.stack.array.StackArray;
 
-/**
- * 最小生成树
- * 
- * @author XW
- * @create_date 2019年10月24日
- */
 public class Graph {
     private final int MAX_VERTS = 20;
     private Vertex[] vertexList;// 顶点数组
@@ -62,7 +56,7 @@ public class Graph {
                 return;
             }
             sortedArray[nVerts - 1] = vertexList[currentVertex].label;
-            deleteVertex(currentVertex);
+            deleteVertex(currentVertex);//在邻接矩阵中删除该节点
         }
         System.out.print("Topologically sorted order:");
         for (int j = 0; j < originVerts; j++) {
@@ -71,7 +65,7 @@ public class Graph {
         }
     }
 
-    // 查找图中顶点是否有后继顶点
+    // 查找图中没有后继顶点的节点，返回，行号
     public int noSuccessors() {
         boolean isEdge;
         for (int row = 0; row < nVerts; row++) {
@@ -113,7 +107,7 @@ public class Graph {
     }
 
     private void moveColLeft(int col, int length) {
-        for (int row = 0; row < length; col++) {
+        for (int row = 0; row < length; row++) {
             adjMat[row][col] = adjMat[row][col + 1];
         }
     }

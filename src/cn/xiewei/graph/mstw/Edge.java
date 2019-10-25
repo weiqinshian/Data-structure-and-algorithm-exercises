@@ -1,0 +1,14 @@
+package cn.xiewei.graph.mstw;
+
+public class Edge {
+    public int srcVert;//‘¥µ„
+    public int destVert;//÷’µ„
+    public int distance;//æ‡¿Î
+    public Edge(int sv,int dv,int d)
+    {
+        srcVert=sv;
+        destVert=dv;
+        distance=d;
+    }
+
+}
