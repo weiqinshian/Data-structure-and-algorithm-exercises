@@ -13,5 +13,4 @@ public class Vertex {
         label =lab;
         isInTree=false;
     }
-
 }

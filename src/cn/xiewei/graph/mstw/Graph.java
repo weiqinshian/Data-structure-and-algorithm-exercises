@@ -1,9 +1,7 @@
 package cn.xiewei.graph.mstw;
 
-import cn.xiewei.stack.Stack;
-
 /**
- * 带权最小生成树
+ * 无向图带权最小生成树
  * 
  * @author XW
  * @create_date 2019年10月25日
@@ -12,27 +10,19 @@ public class Graph {
     private final int MAX_VERTS = 20;
     private final int INFINITY = 65535;
     private Vertex[] vertexList;// 顶点数组
-    private int[][] adjMat;// 邻接矩阵
-
-    private Stack theStack;
-    private char[] sortedArray;// 顶点数组
-
+    private int[][] arrays;// 邻接矩阵
     private int nVerts;// 当前顶点数
-
     private int currentVert;
-
-    private PriorityQ thePQ;
-
+    private PriorityQ queue;
     private int nTree;
 
     public Graph() {
         vertexList = new Vertex[MAX_VERTS];
-        sortedArray = new char[MAX_VERTS];
-        adjMat = new int[MAX_VERTS][MAX_VERTS];
-        thePQ = new PriorityQ();
+        arrays = new int[MAX_VERTS][MAX_VERTS];
+        queue = new PriorityQ();
         for (int j = 0; j < MAX_VERTS; j++) {
             for (int k = 0; k < MAX_VERTS; k++) {
-                adjMat[j][k] = INFINITY;
+                arrays[j][k] = INFINITY;
             }
         }
     }
@@ -49,8 +39,8 @@ public class Graph {
         for (String[] c : edges) {
             int p1 = getPosition(c[0]);
             int p2 = getPosition(c[1]);
-            adjMat[p1][p2] = Integer.parseInt(c[2]);
-            adjMat[p2][p1] = Integer.parseInt(c[2]);
+            arrays[p1][p2] = Integer.parseInt(c[2]);
+            arrays[p2][p1] = Integer.parseInt(c[2]);
         }
     }
 
@@ -75,17 +65,17 @@ public class Graph {
                     continue;
                 if (vertexList[j].isInTree)
                     continue;
-                int distance = adjMat[currentVert][j];
+                int distance = arrays[currentVert][j];
                 if (distance == INFINITY) {
                     continue;
                 }
-                pubInPQ(j, distance);
+                pubInPQ(j, distance);//放入优先队列
             }
-            if (this.thePQ.size() == 0) {
+            if (this.queue.size() == 0) {
                 System.out.println("Graph not connected");
                 return;
             }
-            Edge theEdge = thePQ.removeMin();
+            Edge theEdge = queue.removeMin();
             int sourceVert = theEdge.srcVert;
             currentVert = theEdge.destVert;
             System.out.print(vertexList[sourceVert].label);
@@ -94,19 +84,19 @@ public class Graph {
         }
     }
 
-    public void pubInPQ(int newVert, int newDist) {
-        int queueIndex = thePQ.find(newVert);
+    public void pubInPQ(int newVert, int distance) {
+        int queueIndex = queue.find(newVert);
         if (queueIndex != -1) {
-            Edge temEdge = thePQ.peekN(queueIndex);
+            Edge temEdge = queue.peekN(queueIndex);
             int oldDist = temEdge.distance;
-            if (oldDist > newDist) {
-                thePQ.removeM(queueIndex);// 删除成功
-                Edge theEdge = new Edge(currentVert, newVert, newDist);
-                thePQ.insert(theEdge);
+            if (oldDist > distance) {
+                queue.removeM(queueIndex);// 删除成功
+                Edge theEdge = new Edge(currentVert, newVert, distance);
+                queue.insert(theEdge);
             }
         } else {
-            Edge theEdge = new Edge(currentVert, newVert, newDist);
-            thePQ.insert(theEdge);
+            Edge theEdge = new Edge(currentVert, newVert, distance);
+            queue.insert(theEdge);
         }
     }
 }

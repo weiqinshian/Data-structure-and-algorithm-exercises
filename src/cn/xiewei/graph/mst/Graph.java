@@ -13,13 +13,13 @@ public class Graph {
     private final int MAX_VERTS = 20;
     private Vertex[] vertexList;// 顶点数组
     private int[][] adjMat;// 邻接矩阵
-    private Stack theStack;
+    private Stack stack;
     private int nVerts;// 当前顶点数
 
     public Graph() {
         vertexList = new Vertex[MAX_VERTS];
         adjMat = new int[MAX_VERTS][MAX_VERTS];
-        theStack=new StackArray();
+        stack=new StackArray();
         
     }
     public void addVertex(char[] vertexs) {// 添加边
@@ -38,38 +38,35 @@ public class Graph {
         }
     }
 
- 
-
     private int getPosition(char ch) {
         for (int i = 0; i < vertexList.length; i++)
             if (vertexList[i].label == ch)
                 return i;
         return -1;
     }
+    
     public void displayVertex(int v) {
         System.out.print(vertexList[v].label);
     }
 
     public void mst() {
         vertexList[0].wasVisited = true;
-        theStack.push(0);
-        while (!theStack.isEmpty()) {
-            int currentVertex =(Integer) theStack.peek();
+        stack.push(0);
+        while (!stack.isEmpty()) {
+            int currentVertex =(Integer) stack.peek();
             int v = getAddjUnvisitedVertex(currentVertex);
-            if (v == -1)
-                theStack.pop();
+            if (v == -1)//没有找到没访问过的邻接节点，就将此节点从栈中移除
+                stack.pop();
             else {
                 vertexList[v].wasVisited = true;
-                theStack.push(v);
+                stack.push(v);
                 displayVertex(currentVertex);
                 displayVertex(v);
                 System.out.print("--->");
-
             }
         }
         for(int j=0;j<nVerts;j++)
             vertexList[j].wasVisited=false;
-
     }
 
     public int getAddjUnvisitedVertex(int v) {

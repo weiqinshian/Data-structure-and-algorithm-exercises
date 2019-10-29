@@ -2,40 +2,35 @@ package cn.xiewei.graph.mstw;
 
 public class PriorityQ {
     private final int SIZE = 20;
-    private Edge[] queArray;
+    private Edge[] edges;
     private int size;// 当前边数量
-
     public PriorityQ() {
-        queArray = new Edge[SIZE];
+        edges = new Edge[SIZE];
         size = 0;
     }
-
     public void insert(Edge item) {
         int j;
         for (j = 0; j < size; j++) {
-            if (item.distance >= queArray[j].distance)
+            if (item.distance >= edges[j].distance)
                 break;
         }
         for (int k = size - 1; k >= j; k--) {
-            queArray[k + 1] = queArray[k];
+            edges[k + 1] = edges[k];
         }
-        queArray[j] = item;
+        edges[j] = item;
         size++;
     }
-
     public Edge removeMin() {
-        return queArray[--size];
+        return edges[--size];
     }
-
     public void removeM(int n) {
         for (int j = n; j < size - 1; j++) {
-            queArray[j] = queArray[j + 1];
+            edges[j] = edges[j + 1];
         }
         size--;
     }
-
     public Edge peekMin() {
-        return queArray[size - 1];
+        return edges[size - 1];
     }
 
     public int size() {
@@ -47,12 +42,12 @@ public class PriorityQ {
     }
 
     public Edge peekN(int n) {
-        return queArray[n];
+        return edges[n];
     }
 
     public int find(int findDex) {
         for (int j = 0; j < size; j++) {
-            if (queArray[j].destVert == findDex)
+            if (edges[j].destVert == findDex)
                 return j;
         }
         return -1;

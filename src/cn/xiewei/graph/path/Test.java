@@ -1,6 +1,4 @@
 package cn.xiewei.graph.path;
-
-
 /**
  * 有向带权图的最短路径问题
  * 
@@ -16,6 +14,5 @@ public class Test {
             { "B", "C", "60" }, { "E", "B", "50" }, { "D", "C", "20" }, { "C", "E", "40"  },{ "D", "E" , "70"}};
          theGrapt.addEdge(edges);
          theGrapt.path();
-
     }
 }

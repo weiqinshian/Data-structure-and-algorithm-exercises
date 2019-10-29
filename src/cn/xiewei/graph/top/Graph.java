@@ -1,22 +1,15 @@
 package cn.xiewei.graph.top;
 
-import cn.xiewei.stack.Stack;
-import cn.xiewei.stack.array.StackArray;
-
 public class Graph {
     private final int MAX_VERTS = 20;
     private Vertex[] vertexList;// 顶点数组
-    private int[][] adjMat;// 邻接矩阵
-    private Stack theStack;
-
+    private int[][] arrays;// 邻接矩阵
     private char[] sortedArray;// 顶点数组
     private int nVerts;// 当前顶点数
-
     public Graph() {
         vertexList = new Vertex[MAX_VERTS];
         sortedArray= new char[MAX_VERTS];
-        adjMat = new int[MAX_VERTS][MAX_VERTS];
-        theStack = new StackArray();
+        arrays = new int[MAX_VERTS][MAX_VERTS];
 
     }
 
@@ -32,7 +25,7 @@ public class Graph {
         for (char[] c : edges) {
             int p1 = getPosition(c[0]);
             int p2 = getPosition(c[1]);
-            adjMat[p1][p2] = 1;
+            arrays[p1][p2] = 1;
         }
     }
 
@@ -48,7 +41,7 @@ public class Graph {
     }
 
     public void topo() {
-        int originVerts = nVerts;
+        int vertsNum = nVerts;
         while (nVerts > 0) {
             int currentVertex = noSuccessors();
             if (currentVertex == -1) {
@@ -59,9 +52,9 @@ public class Graph {
             deleteVertex(currentVertex);//在邻接矩阵中删除该节点
         }
         System.out.print("Topologically sorted order:");
-        for (int j = 0; j < originVerts; j++) {
+        for (int j = 0; j < vertsNum; j++) {
             System.out.print(sortedArray[j]);
-            System.out.println();
+            System.out.print(" ");
         }
     }
 
@@ -71,7 +64,7 @@ public class Graph {
         for (int row = 0; row < nVerts; row++) {
             isEdge = false;
             for (int col = 0; col < nVerts; col++) {
-                if (adjMat[row][col] > 0) {
+                if (arrays[row][col] > 0) {
                     isEdge = true;
                     break;
                 }
@@ -88,27 +81,25 @@ public class Graph {
                 vertexList[j] = vertexList[j + 1];
             }
             for (int row = delVert; row < nVerts - 1; row++) {
-                moveRowUp(row, nVerts);
+                moveRowUp(row, nVerts);//移动行
             }
 
             for (int col = delVert; col < nVerts - 1; col++) {
-                moveColLeft(col, nVerts - 1);
+                moveColLeft(col, nVerts - 1);//移动列
             }
-
-           
         }
         nVerts--;
     }
 
     private void moveRowUp(int row, int length) {
         for (int col = 0; col < length; col++) {
-            adjMat[row][col] = adjMat[row + 1][col];
+            arrays[row][col] = arrays[row + 1][col];
         }
     }
 
     private void moveColLeft(int col, int length) {
         for (int row = 0; row < length; row++) {
-            adjMat[row][col] = adjMat[row][col + 1];
+            arrays[row][col] = arrays[row][col + 1];
         }
     }
 

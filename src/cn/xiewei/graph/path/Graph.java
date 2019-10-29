@@ -1,7 +1,7 @@
 package cn.xiewei.graph.path;
 
 /**
- * 带权最小生成树
+ * 有向带权图最小生成树
  * 
  * @author XW
  * @create_date 2019年10月25日
@@ -11,15 +11,12 @@ public class Graph {
     private final int INFINITY = 65535;
     private Vertex[] vertexList;// 顶点数组
     private int[][] adjMat;// 邻接矩阵
-
     private int nVerts;// 当前顶点数
     private int nTree;
     private int currentVert;
     private DisPar[] aPath;
     private int startToCurrent;
 
-    // private Stack theStack;
-    // private char[] sortedArray;// 顶点数组
 
     public Graph() {
         vertexList = new Vertex[MAX_VERTS];
@@ -48,7 +45,6 @@ public class Graph {
             int p1 = getPosition(c[0]);
             int p2 = getPosition(c[1]);
             adjMat[p1][p2] = Integer.parseInt(c[2]);
-//            adjMat[p2][p1] = Integer.parseInt(c[2]);
         }
     }
 
